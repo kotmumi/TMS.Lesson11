@@ -9,7 +9,7 @@ import UIKit
 
 class CellCollectionView: UICollectionView {
     
-    let viewController = ViewController()
+    //let viewController = ViewController()
     let countCellLine = 1
     let countCell = 10
     let flowLayout = UICollectionViewFlowLayout()
@@ -38,14 +38,14 @@ class CellCollectionView: UICollectionView {
 
 extension CellCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewController.historyArray.count
+        1//viewController.historyArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? Cell else {
             return UICollectionViewCell()
         }
-        cell.expressionLabel.text = viewController.historyArray[indexPath.row].joined()
+        //cell.expressionLabel.text = viewController.historyArray[indexPath.row].joined()
         return cell
     }
 }

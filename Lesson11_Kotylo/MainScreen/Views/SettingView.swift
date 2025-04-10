@@ -20,7 +20,7 @@ class SettingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-     func setupViews() {
+     private func setupViews() {
         isUserInteractionEnabled = true
         translatesAutoresizingMaskIntoConstraints = false
          layer.cornerRadius = 24

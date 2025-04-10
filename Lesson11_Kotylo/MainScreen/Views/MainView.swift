@@ -16,7 +16,7 @@ class MainView: UIView {
     let columnThree: VerticalStackView
     let columnFour: VerticalStackView
     
-    let settingView = SettingView()
+   // let settingView = SettingView()
     
     let historyLabel: UILabel = {
         let label = UILabel()
@@ -28,7 +28,7 @@ class MainView: UIView {
         return label
     }()
     
-    let culcLabel: UILabel = {
+    let calcLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -76,11 +76,11 @@ class MainView: UIView {
         backgroundColor = .black
          
         addSubview(listButton)
-        addSubview(culcLabel)
+        addSubview(calcLabel)
         addSubview(historyLabel)
         addSubview(buttonHorizontalStackView)
-        addSubview(settingView)
-        settingView.isHidden = true
+        //addSubview(settingView)
+        //settingView.isHidden = true
          
         buttonHorizontalStackView.addArrangedSubview(columnOne)
         buttonHorizontalStackView.addArrangedSubview(columnTwo)
@@ -101,16 +101,16 @@ class MainView: UIView {
             buttonHorizontalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             buttonHorizontalStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
-            culcLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            culcLabel.bottomAnchor.constraint(equalTo: buttonHorizontalStackView.topAnchor, constant: -16),
+            calcLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            calcLabel.bottomAnchor.constraint(equalTo: buttonHorizontalStackView.topAnchor, constant: -16),
             
             historyLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            historyLabel.bottomAnchor.constraint(equalTo: culcLabel.topAnchor, constant: -8),
+            historyLabel.bottomAnchor.constraint(equalTo: calcLabel.topAnchor, constant: -8),
             
-            settingView.bottomAnchor.constraint(equalTo: buttonHorizontalStackView.bottomAnchor),
-            settingView.leadingAnchor.constraint(equalTo: buttonHorizontalStackView.leadingAnchor),
-            settingView.heightAnchor.constraint(equalToConstant: 200),
-            settingView.widthAnchor.constraint(equalToConstant: 300),
+//            settingView.bottomAnchor.constraint(equalTo: buttonHorizontalStackView.bottomAnchor),
+//            settingView.leadingAnchor.constraint(equalTo: buttonHorizontalStackView.leadingAnchor),
+//            settingView.heightAnchor.constraint(equalToConstant: 200),
+//            settingView.widthAnchor.constraint(equalToConstant: 300),
         ])
     }
 }

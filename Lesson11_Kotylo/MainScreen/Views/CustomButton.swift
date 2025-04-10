@@ -12,7 +12,7 @@ class CustomButton: UIButton {
     let btn: ButtonEnum
     let isNumber: Bool
     let isOperation: Bool
-    var image: UIImage? = nil
+    private var image: UIImage? = nil
     
     init (_ button: ButtonEnum) {
         self.btn = button
@@ -26,7 +26,7 @@ class CustomButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup() {
+    private func setup() {
         isUserInteractionEnabled = true
         translatesAutoresizingMaskIntoConstraints = false
         setTitle(btn.rawValue, for: .normal)

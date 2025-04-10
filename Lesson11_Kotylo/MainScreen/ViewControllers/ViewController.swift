@@ -10,12 +10,8 @@ import Foundation
 
 class ViewController: UIViewController {
     
-    private var numberArray = [String]()
-    var historyArray = [[String]] ()
-    private var historyNumberArray = [String]()
+    private let logic = CalculatorLogic()
     private let mainView = MainView()
-    private var isLastNumber = false
-    private var text = ""
     
     override func loadView() {
         view = mainView
@@ -26,7 +22,8 @@ class ViewController: UIViewController {
         setupViews()
     }
     
-    func setupViews() {
+    private func setupViews() {
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapLabelHistory))
         mainView.columnOne.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
         mainView.columnTwo.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
@@ -36,16 +33,17 @@ class ViewController: UIViewController {
         mainView.historyLabel.addGestureRecognizer(tapGesture)
     }
     
-    @objc func tapLabelHistory(_ sender: CustomButton) {
-        guard let reload = historyArray.last else { return }
-        numberArray = reload
-        text = reload.joined()
-        mainView.culcLabel.text = text
-        print(numberArray)
-        mainView.historyLabel.text = ""
+    
+    @objc private func tapLabelHistory(_ sender: CustomButton) {
+        guard let reLoad = logic.historyArray.last else { return }
+        logic.numberArray = reLoad
+        mainView.calcLabel.text = reLoad.joined()
+        logic.historyArray.removeLast()
+        logic.text = ""
+        mainView.historyLabel.text?.removeAll()
     }
     
-    @objc func tapButtonHistory(_ sender: CustomButton) {
+    @objc private func tapButtonHistory(_ sender: CustomButton) {
         let controller = HistoryViewController()
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -55,93 +53,18 @@ class ViewController: UIViewController {
         present(controller, animated: true)
     }
     
-    @objc func tapButton(_ sender: CustomButton) {
+     @objc private func tapButton(_ sender: CustomButton) {
         animateButtonPress(sender)
-        addNumArray(button: sender)
-        mainView.culcLabel.text = text
+        logic.add(button: sender)
+        print(logic.historyArray)
         
-        switch sender.btn {
-        case .Clear:
-            mainView.culcLabel.text = "0"
+        if logic.text.isEmpty {
+            mainView.calcLabel.text = "0"
             mainView.historyLabel.text = ""
-            numberArray.removeAll()
-            text = ""
-        case .Equal:
-            mainView.historyLabel.text = text
-            historyNumberArray = numberArray
-            text = CalculatorLogic().culc(expression: numberArray)
-            mainView.culcLabel.text = text
-            historyArray.append(numberArray)
-            numberArray.removeAll()
-            numberArray.append(text)
-            
-        case .PlusMinus:
-            if isLastNumber {
-                let number = (Double(numberArray.last ?? "0") ?? 0) * -1
-                numberArray[numberArray.count - 1] = CalculatorLogic().round(number)
-                text = numberArray.joined()
-                mainView.culcLabel.text = text
-            }
-        case .Percent:
-            if isLastNumber {
-                let number = (Double(numberArray.last ?? "0") ?? 0) / 100
-                numberArray[numberArray.count - 1] = CalculatorLogic().round(number)
-                text = numberArray.joined()
-                mainView.culcLabel.text = text
-            }
-        case .Culc:
-            mainView.settingView.isHidden.toggle()
-        default :
-            break
+        } else {
+            mainView.calcLabel.text = logic.text
+            mainView.historyLabel.text = logic.historyArray.last?.joined() ?? ""
         }
-        print(numberArray)
-    }
-}
-
-extension ViewController {
-    
-    func addNumArray(button: CustomButton) {
-        
-        switch button.btn {
-        case .Zero, .One, .Two, .Three, .Four, .Five, .Six, .Seven, .Eight, .Nine:
-            if isLastNumber, !numberArray.isEmpty {
-                numberArray[numberArray.count - 1] = (numberArray.last ?? "") + button.btn.rawValue
-            } else {
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = true
-            }
-        case .Point:
-            if numberArray.isEmpty || !isLastNumber {
-                numberArray.append("0.")
-                isLastNumber = true
-            } else {
-                numberArray[numberArray.count - 1] = (numberArray.last ?? "") + button.btn.rawValue
-            }
-        case .Divide, .Multiply, .Plus:
-            if !numberArray.isEmpty, isLastNumber {
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = false
-            }   else if numberArray.isEmpty {
-                numberArray.append("0")
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = false
-            } else {
-                numberArray.removeLast()
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = false
-            }
-        case .Minus:
-            if numberArray.isEmpty || !isLastNumber {
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = true
-            } else if !numberArray.isEmpty, let operators = numberArray.last, operators != "-" {
-                numberArray.append(button.btn.rawValue)
-                isLastNumber = false
-            }
-        default:
-            break
-        }
-        text = numberArray.joined()
     }
     
     private func animateButtonPress(_ button: UIButton) {
