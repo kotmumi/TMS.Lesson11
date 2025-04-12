@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Cell: UICollectionViewCell {
+class HistoryCell: UITableViewCell {
     
     var expressionLabel: UILabel = {
         let label = UILabel()
@@ -15,7 +15,7 @@ class Cell: UICollectionViewCell {
         label.text = "2+3"
         label.textAlignment = .left
         label.textColor = .grayButton
-        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.font = .systemFont(ofSize: 12, weight: .regular)
         return label
     }()
     
@@ -25,10 +25,10 @@ class Cell: UICollectionViewCell {
         label.text = "6"
         label.textAlignment = .left
         label.textColor = .white
-        label.font = .systemFont(ofSize: 24, weight: .regular)
+        label.font = .systemFont(ofSize: 16, weight: .regular)
         return label
     }()
-    
+   
     let lineView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
@@ -36,8 +36,8 @@ class Cell: UICollectionViewCell {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setConstraints()
     }
@@ -47,9 +47,8 @@ class Cell: UICollectionViewCell {
     }
     
     func setupView() {
-        translatesAutoresizingMaskIntoConstraints = false
+
         backgroundColor = .grayBackground
-        
         addSubview(expressionLabel)
         addSubview(resultLabel)
         addSubview(lineView)
@@ -62,16 +61,15 @@ class Cell: UICollectionViewCell {
             expressionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             expressionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
-            resultLabel.topAnchor.constraint(equalTo: expressionLabel.bottomAnchor, constant: 8),
+            resultLabel.topAnchor.constraint(equalTo: expressionLabel.bottomAnchor, constant: 2),
             resultLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             resultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            resultLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
                     
             lineView.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 8),
             lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             lineView.heightAnchor.constraint(equalToConstant: 1),
-            
-            heightAnchor.constraint(equalToConstant: 80)
 
         ])
     }

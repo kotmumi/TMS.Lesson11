@@ -9,14 +9,14 @@ import UIKit
 
 class HistoryView: UIView {
     
-    lazy var collectionView = CellCollectionView()
+    lazy var collectionView = HistoryTableView()
     
     let readyButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Готово", for: .normal)
         button.setTitleColor(.orangeButton, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return button
     }()
     
@@ -31,6 +31,7 @@ class HistoryView: UIView {
     }
     
     private func setupViews(){
+        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .grayBackground
         addSubview(readyButton)
         addSubview(collectionView)
@@ -41,12 +42,13 @@ class HistoryView: UIView {
         NSLayoutConstraint.activate([
             
             readyButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            readyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            readyButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: readyButton.bottomAnchor, constant: 16),
-            collectionView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            collectionView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            collectionView.widthAnchor.constraint(equalTo: widthAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            
         ])
     }
 }

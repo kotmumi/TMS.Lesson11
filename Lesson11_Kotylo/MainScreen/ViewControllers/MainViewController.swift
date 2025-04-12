@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
     
     private let logic = CalculatorLogic()
     private let mainView = MainView()
@@ -35,16 +35,20 @@ class ViewController: UIViewController {
     
     
     @objc private func tapLabelHistory(_ sender: CustomButton) {
-        guard let reLoad = logic.historyArray.last else { return }
-        logic.numberArray = reLoad
-        mainView.calcLabel.text = reLoad.joined()
-        logic.historyArray.removeLast()
-        logic.text = ""
+        mainView.calcLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
         mainView.historyLabel.text?.removeAll()
     }
     
     @objc private func tapButtonHistory(_ sender: CustomButton) {
-        let controller = HistoryViewController()
+        //MARK: -Lesson12 сallBack
+        let controller = HistoryViewController {
+            guard let expression = $0 else { return }
+            self.logic.setExpression(expression, newExpression: true)
+            self.mainView.historyLabel.text = ""
+            self.mainView.calcLabel.text = self.logic.getExpression().joined()
+        }
+        //MARK: -Lesson12 Delegate
+        controller.delegate = self
         if let sheet = controller.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
@@ -56,14 +60,18 @@ class ViewController: UIViewController {
      @objc private func tapButton(_ sender: CustomButton) {
         animateButtonPress(sender)
         logic.add(button: sender)
-        print(logic.historyArray)
+         print("History Expression: \(logic.getHistoryExpression())")
+         print("Result Expression: \(logic.getResultExpression())")
+         print("Last Expression: \(logic.getExpression())")
         
-        if logic.text.isEmpty {
+         if logic.getExpression().isEmpty {
             mainView.calcLabel.text = "0"
             mainView.historyLabel.text = ""
         } else {
-            mainView.calcLabel.text = logic.text
-            mainView.historyLabel.text = logic.historyArray.last?.joined() ?? ""
+            mainView.calcLabel.text = logic.getExpression().joined()
+            if !logic.getResultExpression().isEmpty {
+                mainView.historyLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
+            }
         }
     }
     
@@ -77,3 +85,16 @@ class ViewController: UIViewController {
         }
     }
 }
+
+//MARK: -Lesson12 Delegate
+extension MainViewController: HistoryViewControllerDelegate {
+    
+    func getResultArray() -> [String] {
+        logic.getResultExpression()
+    }
+    
+    func getNumArray() -> [[String]] {
+        logic.getHistoryExpression()
+    }
+}
+

@@ -10,9 +10,7 @@ import Foundation
 class CalculatorLogic {
     
     private var isLastNumber = false
-    var numberArray = [String]()
-    var historyArray = [[String]] ()
-    var text = ""
+    private var expression = Expression()
     
     //MARK: -Calculate func
     private func calc (expression: [String]) -> String {
@@ -48,77 +46,74 @@ class CalculatorLogic {
         }
         return round(result)
     }
-    //MARK: -add number Array
+    
+    //MARK: -add Expression Array
     func add(button: CustomButton) {
-        
+        var lastExpression = getExpression()
         switch button.btn {
         case .Zero, .One, .Two, .Three, .Four, .Five, .Six, .Seven, .Eight, .Nine:
-            if isLastNumber, !numberArray.isEmpty {
-                numberArray[numberArray.count - 1] = (numberArray.last ?? "") + button.btn.rawValue
+            if isLastNumber, !lastExpression.isEmpty {
+                guard var lastCharExpressiom = lastExpression.last else { return }
+                lastCharExpressiom += button.btn.rawValue
             } else {
-                numberArray.append(button.btn.rawValue)
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = true
             }
         case .Point:
-            if numberArray.isEmpty || !isLastNumber {
-                numberArray.append("0.")
+            if !isLastNumber || lastExpression.isEmpty {
+                lastExpression.append("0.")
                 isLastNumber = true
             } else {
-                numberArray[numberArray.count - 1] = (numberArray.last ?? "") + button.btn.rawValue
+                guard var lastCharExpressiom = lastExpression.last else { return }
+                lastCharExpressiom += button.btn.rawValue
             }
         case .Divide, .Multiply, .Plus:
-            if !numberArray.isEmpty, isLastNumber {
-                numberArray.append(button.btn.rawValue)
+            if isLastNumber, !lastExpression.isEmpty {
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = false
-            }   else if numberArray.isEmpty {
-                numberArray.append("0")
-                numberArray.append(button.btn.rawValue)
+            }   else if lastExpression.isEmpty {
+                lastExpression.append("0")
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = false
             } else {
-                numberArray.removeLast()
-                numberArray.append(button.btn.rawValue)
+                lastExpression.removeLast()
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = false
             }
         case .Minus:
-            if numberArray.isEmpty || !isLastNumber {
-                numberArray.append(button.btn.rawValue)
+            if !isLastNumber || lastExpression.isEmpty {
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = true
-            } else if !numberArray.isEmpty, let operators = numberArray.last, operators != "-" {
-                numberArray.append(button.btn.rawValue)
+            } else if !lastExpression.isEmpty, let operators = lastExpression.last, operators != "-" {
+                lastExpression.append(button.btn.rawValue)
                 isLastNumber = false
             }
         case .Clear:
-            //mainView.culcLabel.text = "0"
-            //mainView.historyLabel.text = ""
-            numberArray.removeAll()
-            text = ""
+            lastExpression.removeAll()
             isLastNumber = false
         case .Equal:
-            if !isLastNumber, !numberArray.isEmpty {
-                numberArray.removeLast()
+            if !isLastNumber,  !lastExpression.isEmpty {
+                lastExpression.removeLast()
             }
-            text = calc(expression: numberArray)
-            historyArray.append(numberArray)
-            numberArray.removeAll()
-            numberArray.append(text)
+            setResultExpression(calc(expression: lastExpression))
+            setExpression([getResultExpression().last ?? ""], newExpression: true)
             isLastNumber = true
+            return
             
         case .PlusMinus:
             if isLastNumber {
-                let number = (Double(numberArray.last ?? "0") ?? 0) * -1
-                numberArray[numberArray.count - 1] = round(number)
-                text = numberArray.joined()
+                let number = (Double(lastExpression.last ?? "0") ?? 0) * -1
+                lastExpression[lastExpression.count - 1] = round(number)
             }
         case .Percent:
             if isLastNumber {
-                let number = (Double(numberArray.last ?? "0") ?? 0) / 100
-                numberArray[numberArray.count - 1] = round(number)
-                text = numberArray.joined()
+                let number = (Double(lastExpression.last ?? "0") ?? 0) / 100
+                lastExpression[lastExpression.count - 1] = round(number)
             }
         case .Culc:
             break
         }
-        text = numberArray.joined()
+        setExpression(lastExpression, newExpression: false)
     }
     //MARK: -Separate number with operators
     private func numberSeparateOperators(_ expression: [String]) -> (numbers: [Double], operators: [String]) {
@@ -143,5 +138,33 @@ class CalculatorLogic {
         } else {
             return String(number)
         }
+    }
+    
+    func getExpression() -> [String] {
+        return expression.lastExpression
+    }
+    
+    func setExpression(_ expression: [String], newExpression: Bool) {
+        if newExpression || self.expression.historyExpression.isEmpty {
+            self.expression.historyExpression.append(expression)
+        } else {
+            self.expression.historyExpression[self.expression.historyExpression.count - 1] = expression
+        }
+    }
+    
+    func getHistoryExpression() -> [[String]] {
+        expression.historyExpression
+    }
+    
+    func getResultExpression() -> [String] {
+        expression.historyResult
+    }
+    
+    func setResultExpression(_ result: String) {
+        expression.historyResult.append(result)
+    }
+    
+    func getExpressionObject() -> Expression {
+        expression
     }
 }
