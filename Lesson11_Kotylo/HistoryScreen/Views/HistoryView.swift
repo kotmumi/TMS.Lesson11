@@ -19,7 +19,7 @@ class HistoryView: UIView {
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return button
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()

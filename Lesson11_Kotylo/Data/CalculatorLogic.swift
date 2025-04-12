@@ -167,4 +167,8 @@ class CalculatorLogic {
     func getExpressionObject() -> Expression {
         expression
     }
+    
+    func deleteLastExpression() {
+        expression.historyExpression.removeLast()
+    }
 }

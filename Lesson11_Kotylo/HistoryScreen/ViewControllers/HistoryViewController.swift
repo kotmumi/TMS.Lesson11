@@ -9,8 +9,10 @@ import UIKit
 
 //MARK: -Lesson12 Delegate
 protocol HistoryViewControllerDelegate {
-    func getNumArray() -> [[String]]
+
+    func getExpression() -> [[String]]
     func getResultArray() -> [String]
+    func setExpression(_ expression: [String])
 }
 
 class HistoryViewController: UIViewController {
@@ -41,12 +43,21 @@ class HistoryViewController: UIViewController {
     private func setupViews() {
         historyView.readyButton.addTarget(self, action: #selector(tapBtn), for: .touchUpInside)
         //MARK: -Lesson12 Delegate
-        historyView.collectionView.expressionArray = delegate?.getNumArray() ?? []
+        historyView.collectionView.delegateSecond = self
+        historyView.collectionView.expressionArray = delegate?.getExpression() ?? []
         historyView.collectionView.resultArray = delegate?.getResultArray() ?? []
         historyView.collectionView.reloadData()
+        
     }
     
     @objc func tapBtn() {
+        dismiss(animated: true)
+    }
+}
+
+extension HistoryViewController: HistoryCellDelegate {
+    func TapCell(_ expression: [String]) {
+        delegate?.setExpression(expression)
         dismiss(animated: true)
     }
 }

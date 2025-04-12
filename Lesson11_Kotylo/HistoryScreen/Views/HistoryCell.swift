@@ -73,4 +73,9 @@ class HistoryCell: UITableViewCell {
 
         ])
     }
+    
+    override func prepareForReuse() {
+        expressionLabel.text = ""
+        resultLabel.text = ""
+    }
 }

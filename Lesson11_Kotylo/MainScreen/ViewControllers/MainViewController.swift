@@ -93,8 +93,15 @@ extension MainViewController: HistoryViewControllerDelegate {
         logic.getResultExpression()
     }
     
-    func getNumArray() -> [[String]] {
+    func getExpression() -> [[String]] {
         logic.getHistoryExpression()
+    }
+    
+    func setExpression(_ expression: [String]) {
+        logic.deleteLastExpression()
+        logic.setExpression(expression, newExpression: true)
+        mainView.calcLabel.text = logic.getHistoryExpression().last?.joined()
+        mainView.historyLabel.text?.removeAll()
     }
 }
 

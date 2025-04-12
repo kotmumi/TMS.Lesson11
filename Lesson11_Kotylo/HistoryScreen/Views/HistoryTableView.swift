@@ -7,12 +7,18 @@
 
 import UIKit
 
+protocol HistoryCellDelegate {
+    func TapCell(_: [String])
+}
+
 class HistoryTableView: UITableView {
     
     var expressionArray: [[String]] = []
     var resultArray: [String] = []
+    var delegateSecond: HistoryCellDelegate?
     
     override init(frame: CGRect, style: UITableView.Style) {
+
         super.init(frame: frame, style: style)
         setupView()
     }
@@ -39,7 +45,9 @@ extension HistoryTableView: UITableViewDataSource {
         guard  let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HistoryCell else {
             return UITableViewCell()
         }
-        
+        if expressionArray.isEmpty {
+            return cell
+        }
         cell.expressionLabel.text = expressionArray[indexPath.row].joined()
         cell.resultLabel.text = resultArray[indexPath.row]
         return cell
@@ -48,6 +56,10 @@ extension HistoryTableView: UITableViewDataSource {
     
 extension HistoryTableView: UITableViewDelegate {
     
+     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        delegateSecond?.TapCell(expressionArray[indexPath.row])
+    }
 }
 
 
