@@ -58,7 +58,7 @@ extension HistoryTableView: UITableViewDelegate {
     
      func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        delegateSecond?.TapCell(expressionArray[indexPath.row])
+         delegateSecond?.TapCell(expressionArray[indexPath.row])
     }
 }
 

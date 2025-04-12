@@ -55,6 +55,7 @@ class CalculatorLogic {
             if isLastNumber, !lastExpression.isEmpty {
                 guard var lastCharExpressiom = lastExpression.last else { return }
                 lastCharExpressiom += button.btn.rawValue
+                lastExpression[lastExpression.count - 1] = lastCharExpressiom
             } else {
                 lastExpression.append(button.btn.rawValue)
                 isLastNumber = true
@@ -66,6 +67,7 @@ class CalculatorLogic {
             } else {
                 guard var lastCharExpressiom = lastExpression.last else { return }
                 lastCharExpressiom += button.btn.rawValue
+                lastExpression[lastExpression.count - 1] = lastCharExpressiom
             }
         case .Divide, .Multiply, .Plus:
             if isLastNumber, !lastExpression.isEmpty {
@@ -133,13 +135,13 @@ class CalculatorLogic {
     private func round(_ number: Double) -> String {
         if number.truncatingRemainder(dividingBy: 1) == 0 {
             return String(format: "%.0f", number)
-        } else if number.truncatingRemainder(dividingBy: 0.001) != 0 {
+        } else if number.truncatingRemainder(dividingBy: 0.001) > 0.999 {
             return String(format: "%.3f",number)
         } else {
             return String(number)
         }
     }
-    
+    // MARK: -Get Set func
     func getExpression() -> [String] {
         return expression.lastExpression
     }

@@ -69,7 +69,7 @@ class MainViewController: UIViewController {
             mainView.historyLabel.text = ""
         } else {
             mainView.calcLabel.text = logic.getExpression().joined()
-            if !logic.getResultExpression().isEmpty {
+            if !logic.getResultExpression().isEmpty, sender.btn == .Equal {
                 mainView.historyLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
             }
         }

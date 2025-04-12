@@ -29,12 +29,12 @@ class HistoryCell: UITableViewCell {
         return label
     }()
    
-    let lineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .lightGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+//    let lineView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .lightGray
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -51,7 +51,7 @@ class HistoryCell: UITableViewCell {
         backgroundColor = .grayBackground
         addSubview(expressionLabel)
         addSubview(resultLabel)
-        addSubview(lineView)
+//        addSubview(lineView)
     }
     
     func setConstraints() {
@@ -66,10 +66,10 @@ class HistoryCell: UITableViewCell {
             resultLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             resultLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
                     
-            lineView.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 8),
-            lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            lineView.heightAnchor.constraint(equalToConstant: 1),
+//            lineView.topAnchor.constraint(equalTo: lineView.bottomAnchor, constant: 8),
+//            lineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+//            lineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+//            lineView.heightAnchor.constraint(equalToConstant: 1),
 
         ])
     }

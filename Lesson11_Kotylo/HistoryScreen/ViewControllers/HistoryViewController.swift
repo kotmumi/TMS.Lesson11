@@ -57,6 +57,7 @@ class HistoryViewController: UIViewController {
 
 extension HistoryViewController: HistoryCellDelegate {
     func TapCell(_ expression: [String]) {
+        
         delegate?.setExpression(expression)
         dismiss(animated: true)
     }
