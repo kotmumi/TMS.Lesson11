@@ -18,7 +18,6 @@ protocol HistoryViewControllerDelegate {
 class HistoryViewController: UIViewController {
     
     let historyView = HistoryView()
-    
     //MARK: -Lesson12
     var delegate: HistoryViewControllerDelegate?
     var callback: ([String]?) -> Void
@@ -57,8 +56,10 @@ class HistoryViewController: UIViewController {
 
 extension HistoryViewController: HistoryCellDelegate {
     func TapCell(_ expression: [String]) {
-        
-        delegate?.setExpression(expression)
+        //Немного глуппый вызов callBack в функции делегата, но для примера думаю пойдет
+        callback(expression)
+        //второй вариант через делегата
+     //   delegate?.setExpression(expression)
         dismiss(animated: true)
     }
 }

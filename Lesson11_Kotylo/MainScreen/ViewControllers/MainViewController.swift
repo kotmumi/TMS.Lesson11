@@ -25,17 +25,36 @@ class MainViewController: UIViewController {
     private func setupViews() {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapLabelHistory))
-        mainView.columnOne.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
+        mainView.columnOne.elements.forEach {
+            if $0.btn == .Culc {
+                $0.addTarget(self, action: #selector(tapSetting), for: .touchUpInside)
+            }
+            $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+        }
         mainView.columnTwo.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
         mainView.columnThree.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
         mainView.columnFour.elements.forEach { $0.addTarget(self, action: #selector(tapButton), for: .touchUpInside) }
         mainView.listButton.addTarget(self, action: #selector(tapButtonHistory), for: .touchUpInside)
         mainView.historyLabel.addGestureRecognizer(tapGesture)
+        mainView.settingView.settingButton.addTarget(self, action: #selector(tapSetting), for: .touchUpInside)
+        mainView.settingView.settingTextField.delegate = self
+        
     }
     
+    @objc private func tapSetting(_ sender: CustomButton) {
+        switch sender.btn  {
+        case .Culc:
+            mainView.settingView.isHidden.toggle()
+        default :
+            mainView.historyLabel.text = mainView.settingView.settingTextField.text
+            mainView.culcLabel.text = "Thanks)"
+            mainView.settingView.isHidden.toggle()
+        }
+        
+    }
     
     @objc private func tapLabelHistory(_ sender: CustomButton) {
-        mainView.calcLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
+        mainView.culcLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
         mainView.historyLabel.text?.removeAll()
     }
     
@@ -45,7 +64,7 @@ class MainViewController: UIViewController {
             guard let expression = $0 else { return }
             self.logic.setExpression(expression, newExpression: true)
             self.mainView.historyLabel.text = ""
-            self.mainView.calcLabel.text = self.logic.getExpression().joined()
+            self.mainView.culcLabel.text = self.logic.getExpression().joined()
         }
         //MARK: -Lesson12 Delegate
         controller.delegate = self
@@ -65,10 +84,10 @@ class MainViewController: UIViewController {
          print("Last Expression: \(logic.getExpression())")
         
          if logic.getExpression().isEmpty {
-            mainView.calcLabel.text = "0"
+            mainView.culcLabel.text = "0"
             mainView.historyLabel.text = ""
         } else {
-            mainView.calcLabel.text = logic.getExpression().joined()
+            mainView.culcLabel.text = logic.getExpression().joined()
             if !logic.getResultExpression().isEmpty, sender.btn == .Equal {
                 mainView.historyLabel.text = logic.getHistoryExpression()[logic.getHistoryExpression().count - 2].joined()
             }
@@ -100,8 +119,16 @@ extension MainViewController: HistoryViewControllerDelegate {
     func setExpression(_ expression: [String]) {
         logic.deleteLastExpression()
         logic.setExpression(expression, newExpression: true)
-        mainView.calcLabel.text = logic.getHistoryExpression().last?.joined()
+        mainView.culcLabel.text = logic.getHistoryExpression().last?.joined()
         mainView.historyLabel.text?.removeAll()
+    }
+}
+
+extension MainViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
